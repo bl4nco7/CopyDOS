@@ -4,7 +4,7 @@ from manim_slides import Slide
 
 class Introduction(Slide):
     def construct(self):
-        welcome = Text("Estos es una prueba para mi presentación de Manim")
+        welcome = Text("Estos es una prueba para mi presentación em Python")
         square = Square(color=BLUE)
         dot = Dot(color=RED).shift(RIGHT + UP)
 
