@@ -55,7 +55,7 @@ class Introduction(Slide):
 
         # BETA DOS
         
-        self.wipe(welcome, square)
+        self.wipe(titulo, square)
         self.play(FadeIn(dot))
 
         self.next_slide(loop=True)
