@@ -67,7 +67,8 @@ class Portada(Slide):
             run_time=2.5 # Animación de salida ligeramente más rápida
         )
 
-## Primera Lamina 
+######################## Lamina 1 #############################
+
 class lamina_1(Slide):
     def construct(self):
         # Define a cor de fundo
@@ -166,7 +167,73 @@ class lamina_1(Slide):
         self.play(FadeOut(text2,equa2,text3,equa3,t,text1,equa))
         # self.play(UntypeWithCursor(text, cursor),run_time = 2) # Se va a borrar en la lamina dos
 
-# Ultima Lamina  
+######################## Lamina 2 #############################
+
+class lamina_2(Slide):
+    def construct(self):
+        # Define a cor de fundo
+        self.camera.background_color = WHITE 
+        # Plantilla LaTeX para justificación (si se necesita)
+        myTemplate = TexTemplate()
+        myTemplate.add_to_preamble(r"\usepackage{ragged2e}")
+        # Linea
+        linea = Line(np.array([-6.5, 3, 0]), np.array([6.5, 3, 0]), color=BLUE_D, stroke_width=0.7) 
+
+
+        text = Text("Álgebra exterior de Grassmann", color=BLUE_D, font_size=30)
+        text.move_to([text.width/2 - 6.5, 3.5, 0])
+        cursor = Rectangle(
+            color = GREY_A,
+            fill_color = GREY_A,
+            fill_opacity = 1.0,
+            height = 1.1,
+            width = 0.5,
+        ).move_to(text[0]) # Position the cursor
+        self.add(linea,text)
+        self.next_slide()
+        # Primeiro Paragrafo
+        paragrafo_1 = "Seus elementos são multivetores, ou também chamados blade de grau $p$, ou $p$-blade, é"
+        text1 = Tex(paragrafo_1, tex_template=myTemplate, tex_environment="justify",color=BLACK)
+        text1.font_size = 35
+        text1.move_to([text1.width/2 - 6.5, 2.3, 0])
+
+        # Algebra Graduada
+        equa = MathTex(
+              "\\textmd{A} = v_1\\wedge\\cdots\\wedge v_p \\quad \\text{com} \\quad  v_1,\\ldots,v_p\in \\mathbb{R}^n ",
+            color=BLACK
+        ).scale(0.8)
+        equa.next_to(text1, DOWN)
+
+        self.play(FadeIn(text1),Write(equa),run_time=2)
+        self.next_slide() # PASO DE LAMINA
+        # Texto 2
+        texto2 = "que representa um paralelepípedo gerado por $\\{v_1,\\ldots,v_p\\}$ e determina um subespaço $[\\textmd{A}] = \\text{span}\\{v_1,\\ldots,v_p\\}.$ O produto interno de $\\textmd{A} = v_1\\wedge\\cdots\\wedge v_p$ e $\\textmd{B}=w_1\\wedge\\cdots\\wedge w_p$, é "
+        text2 = Tex(texto2, tex_template=myTemplate, tex_environment="justify",color=BLACK)
+        text2.font_size = 35
+        text2.next_to(equa, DOWN)
+
+
+        # Ecua 2
+        equa2 = MathTex(
+             "<\\textmd{A} , \\textmd{B}> = \\det \\big(<v_i , w_j> \\big)",
+            color=BLACK
+        ).scale(0.8)
+        equa2.next_to(text2, 2*DOWN)
+        self.play(FadeIn(text2),Write(equa2),run_time=2)
+
+        # Texto 3
+        texto3 = "a norma $\\| \\textmd{A} \\| = \sqrt{<\\textmd{A} , \\textmd{A}>}$ da o $p-$dimensional do paralelepípedo"
+        text3 = Tex(texto3, tex_template=myTemplate, tex_environment="justify",color=BLACK)
+        text3.font_size = 35
+        text3.next_to(equa2, 2*DOWN) 
+        self.next_slide() # PASO DE LAMINA
+        self.play(FadeIn(text3),run_time=2)  
+
+        self.play(FadeOut(text1,equa,text2,equa2,text3),run_time = 2)
+
+        self.play(UntypeWithCursor(text, cursor))
+
+########################################################## Ultima Lamina  ########################################
 
 class GraciasFinal(Slide):
   def construct(self): 
