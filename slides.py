@@ -229,6 +229,201 @@ class lamina_2(Slide):
 
         self.play(UntypeWithCursor(text, cursor)) 
 
+         # Lamina 3
+
+         ######################## Lamina 4 #############################
+class lamina_4(Slide):
+    def construct(self):
+        # Define a cor de fundo
+        self.camera.background_color = WHITE
+        # Plantilla LaTeX para justificación (si se necesita)
+        myTemplate = TexTemplate()
+        myTemplate.add_to_preamble(r"\usepackage{ragged2e}")
+        # Linea
+        linea = Line(np.array([-6.5, 3, 0]), np.array([6.5, 3, 0]), color=BLUE_D, stroke_width=0.7)
+        self.add(linea)
+        ######################################## USAR CN TODAS LAS LAMINAS ####################################### 
+        # === 1. Título ===
+        text = Text("Ângulos entre subespaços", color=BLUE_D, font_size=30, font='sans-serif')
+        text.move_to([text.width/2 - 6.5, 3.5, 0])
+        cursor = Rectangle(
+            color = GREY_A,
+            fill_color = GREY_A,
+            fill_opacity = 1.0,
+            height = 1.1,
+            width = 0.5,
+        ).move_to(text[0]) # Position the cursor
+        self.play(TypeWithCursor(text, cursor))
+        self.play(Blink(cursor, blinks=2))
+        ## RECATNGULOS 
+        block_box = RoundedRectangle(
+            color = BLACK,         # Cor da borda (Azul Escuro)
+            fill_color = BLACK,
+            fill_opacity = 0.1,
+            height = 1,
+            width = 14,
+             )
+        block_box.move_to([0,2.3,0])
+        block_box1 = RoundedRectangle(
+            color = BLACK,         # Cor da borda (Azul Escuro)
+            fill_color = BLUE_A,
+            fill_opacity = 0.5,
+            height = 4.5,
+            width = 14,
+           )
+        block_box1.next_to(block_box, DOWN, buff=0.1) 
+      
+         # === 2. "Definição" ===
+        definicao = Tex("Definição", color=BLACK)
+        definicao.move_to([definicao.width/2-6.5,2.3,0])
+        self.play(Create(block_box), 
+                  Write(definicao), 
+                  FadeIn(block_box1, shift=LEFT)
+                  )
+        
+
+        # === 3. Texto inicial sobre as bases ===
+        paragrafo = "Bases ortonormais $\\textmd{B}_{\\textmd{V}}=\\{e_1,\ldots,e_p\\}$ e $\\textmd{B}_{\\textmd{W}}=\\{f_1,\\ldots,f_q\\}$ de $\\textmd{V},\\textmd{W}\\subset\\mathbb{R}^n$ são principais se:"
+        texto_bases = Tex(paragrafo,tex_template=myTemplate, tex_environment="justify",color=BLACK,font_size = 35) #, t2c={"Bases ortonormais": ORANGE, "weight": RED}  )
+        #texto_bases.scale(0.8)
+        texto_bases.next_to(definicao, 2 * DOWN, aligned_edge=LEFT)  
+        #texto_bases.move_to([texto_bases.width/2 -6.5, 1.3, 0])
+        self.play(FadeIn(texto_bases, shift=DOWN))
+        self.next_slide() # Paso de Lamina 
+
+        # === 4. Equação do produto interno com os casos ===
+        eq_produto = MathTex(
+        r"\langle e_i , f_j\rangle = "
+        r"\begin{cases}"
+        r"0 & \text{se } i \neq j,\\[4pt]"
+        r"\cos(\theta_i)"
+        r"& \text{se } i = j."
+        r"\end{cases}",
+        color=BLACK
+        )
+        eq_produto.scale(0.9)
+        eq_produto.move_to([eq_produto.width/2 -6.5, 0, 0])
+        self.play(Write(eq_produto))
+        self.wait(0.7)
+
+        # === 5. Ordenação dos ângulos ===
+        eq_ordenacao = MathTex(
+            r"0 \leq \theta_1 \leq \cdots \leq \theta_m \leq \frac{\pi}{2},",
+            color=BLACK
+        )
+        eq_ordenacao.scale(0.9)
+        eq_ordenacao.move_to([5-eq_ordenacao.width/2, 0, 0])
+        self.play(Write(eq_ordenacao))
+        self.next_slide() # Paso de Lamina 
+
+        # === 6. Fórmula final dos ângulos principais ===
+        eq_theta = MathTex(
+            r"\theta_i = \cos^{-1}(e_i \cdot f_i).",
+            color=BLACK
+        )
+        eq_theta.scale(0.9)
+        eq_theta.move_to([0,-2,0])
+        self.play(Write(eq_theta))
+        self.next_slide() # Paso de Lamina  
+        # === Encerramento ===
+        self.play(FadeOut(block_box,shift=RIGHT),
+                  FadeOut(block_box1,shift=DOWN),
+                  FadeOut(definicao, shift=UP),
+                  FadeOut(texto_bases,shift=DOWN),
+                  FadeOut(eq_produto, shift=UP),
+                  FadeOut(eq_ordenacao, shift=UP),
+                  FadeOut(eq_theta, shift=UP),
+                  )
+
+        self.play(UntypeWithCursor(text, cursor))
+        ## Lamina 5 ## 
+class lamina_5(Scene):
+    def construct(self):
+        # Define a cor de fundo
+        self.camera.background_color = WHITE
+        # Plantilla LaTeX para justificación (si se necesita)
+        myTemplate = TexTemplate()
+        myTemplate.add_to_preamble(r"\usepackage{ragged2e}")
+        # Linea
+        linea = Line(np.array([-6.5, 3, 0]), np.array([6.5, 3, 0]), color=BLUE_D, stroke_width=0.7)
+        self.add(linea)
+        ######################################## USAR CN TODAS LAS LAMINAS #######################################
+
+        # === 1. Título ===
+        text = Text("Grassmanniana total de      .", color=BLUE_D, font_size=30, font='sans-serif')
+        text.move_to([text.width/2 - 6.5, 3.5, 0])
+        rn = Tex(r"$\mathbb{R}^n$",color=BLUE_D).scale(1.1)
+        rn.move_to([-(7-text.width), 3.5, 0])
+        cursor = Rectangle(
+            color = GREY_A,
+            fill_color = GREY_A,
+            fill_opacity = 1.0,
+            height = 1.1,
+            width = 0.5,
+          ).move_to(text[0]) # Position the cursor
+        self.play(TypeWithCursor(text, cursor))
+        self.play(FadeIn(rn))
+        self.play(Blink(cursor, blinks=2))
+
+        # Bloque tipo beamer (rectángulo)
+        block_box = RoundedRectangle(
+            color = BLACK,         # Cor da borda (Azul Escuro)
+            fill_color = BLACK,
+            fill_opacity = 0.1,
+            height = 1,
+            width = 14,
+             )
+        block_box.move_to([0,2.3,0])
+        block_box1 = RoundedRectangle(
+            color = BLACK,         # Cor da borda (Azul Escuro)
+            fill_color = BLUE_A,
+            fill_opacity = 0.5,
+            height = 4.5,
+            width = 14,
+           )
+        block_box1.next_to(block_box, DOWN, buff=0.1)
+
+         # === 2. "Definição" ===
+        definicao = Tex("Definição (Grassmannianas)", color=BLACK)
+        definicao.move_to([definicao.width/2-6.5,2.3,0])
+        self.play(Create(block_box),
+                  Write(definicao),
+                  FadeIn(block_box1, shift=LEFT)
+                  )
+        self.wait(0.5)
+
+
+        # Contenido del bloque
+        texto = Tex(
+            r"""
+            Seja $\textmd{V}$ um espaço vetorial sobre $\mathbb{R}$ de dimensão $n$.
+            \begin{itemize}
+                \item A $p$-Grassmanniana $\textmd{Gr}_{p}(\mathbb{R}^n)$ se define como o conjunto \\
+                de sub-espaços vetoriais de dimensão $p$ do espaço vetorial $\textmd{V}$.
+                \item Grassmanniana total
+                 \[
+                    \textmd{Gr}(\mathbb{R}^n)=\bigcup_{p=0}^n \textmd{Gr}_{p}(\mathbb{R}^n).
+                 \]
+            \end{itemize}
+            """,
+            color=BLACK,
+            font_size = 35,
+            tex_environment="justify",
+            tex_template=myTemplate
+        ).next_to(definicao, 2 * DOWN, aligned_edge=LEFT)
+        self.play(FadeIn(texto, shift=DOWN))
+        self.next_slide() # Paso de Lamina   
+
+        self.play(FadeOut(block_box,shift=RIGHT),
+                  FadeOut(block_box1,shift=DOWN),
+                  FadeOut(definicao, shift=UP),
+                  FadeOut(texto, shift=LEFT)
+                  )
+        self.play(Unwrite(rn))
+        self.play(UntypeWithCursor(text, cursor))
+ 
+
+        
         ############################################  Penultima Lamina (Referencias)  ########################################
 
 
