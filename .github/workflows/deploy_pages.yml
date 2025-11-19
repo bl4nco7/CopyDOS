@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  FILE: 'slides.py'  # Source file where scenes are defined
+  FILE: '10_pos_mat.py'  # Source file where scenes are defined
   MANIM: 'manim'  # manim or manimgl - which Manim renderer to use
   SCENES: 'Portada'  # Space-separated list of scenes to render # lamina_1 lamina_2 lamina_3 lamina_4 lamina_5 Referencias GraciasFinal
   USES_TEX: true  # true or false - disabling this will make the action run faster
