@@ -337,7 +337,7 @@ class lamina_4(Slide):
 
         self.play(UntypeWithCursor(text, cursor))
         ## Lamina 5 ## 
-class lamina_5(Scene):
+class lamina_5(Slide):
     def construct(self):
         # Define a cor de fundo
         self.camera.background_color = WHITE
@@ -389,8 +389,7 @@ class lamina_5(Scene):
         self.play(Create(block_box),
                   Write(definicao),
                   FadeIn(block_box1, shift=LEFT)
-                  )
-        self.wait(0.5)
+                  ) 
 
 
         # Contenido del bloque
