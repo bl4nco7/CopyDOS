@@ -229,7 +229,264 @@ class lamina_2(Slide):
 
         self.play(UntypeWithCursor(text, cursor)) 
 
-         # Lamina 3
+      ######################## Lamina 3 #############################
+class lamina_3(Slide):
+    def construct(self):
+        # Define a cor de fundo
+        self.camera.background_color = WHITE
+        # Plantilla LaTeX para justificación (si se necesita)
+        myTemplate = TexTemplate()
+        myTemplate.add_to_preamble(r"\usepackage{ragged2e}")
+        # Linea
+        linea = Line(np.array([-6.5, 3, 0]), np.array([6.5, 3, 0]), color=BLUE_D, stroke_width=0.7)
+        self.add(linea)
+        ######################################## USAR CN TODAS LAS LAMINAS #######################################
+        # === === === === === === === === === === 1. Título === === === === === === === === === ===
+        text = Text("Representação Geométrica en      .", color=BLUE_D, font_size=30, font='sans-serif')
+        text.move_to([text.width/2 - 6.5, 3.5, 0])
+        r3 = Tex(r"$\mathbb{R}^3$",color=BLUE_D).scale(1.1)
+        r3.move_to([-(7-text.width), 3.6, 0])
+        cursor = Rectangle(
+            color = GREY_A,
+            fill_color = GREY_A,
+            fill_opacity = 1.0,
+            height = 1.1,
+            width = 0.5,
+          ).move_to(text[0]) # Position the cursor
+        # Aparece el texto del título más el cursor
+        self.play(TypeWithCursor(text, cursor))
+        self.play(FadeIn(r3))
+        self.play(Blink(cursor, blinks=1))
+        # Crea la division del plano
+
+        # Linha com Traços Mais Longos (dash_length maior)
+        dashed_line_1 = DashedLine(
+            start=np.array([-6.5,0,0]),
+            end=np.array([6.5,0,0]),
+            dash_length=0.2, # Traços mais longos
+            color=BLUE
+        )
+        # Linha com Traços Mais Longos (dash_length maior)
+        dashed_line_2 = DashedLine(
+            start=linea.get_center(),
+            end=-linea.get_center()+np.array([0,-1,0]),
+            dash_length=0.2, # Traços mais longos
+            color=BLUE
+        )
+
+        # === === === === === === === === === === 0 - blade (Inicial) === === === === === === === === === ===
+
+        ponto = Dot(radius=0.16, color=BLUE_D).move_to([-2.5,0,0])
+        ponto.pf = ponto.copy().move_to([-linea.width/4, dashed_line_2.height/4 ,0]) # Copia del Punto
+
+        # Texto del punto
+        texto_ponto = MathTex(
+            r"v = \{0\}", r",\: \text{é um }", r"0\text{-blade}",
+            color=BLACK
+          ).next_to(ponto, RIGHT)
+        texto_ponto.pf = texto_ponto[2].copy().next_to(ponto.pf, DOWN)
+        # Aparece
+        self.play(Write(ponto),FadeIn(texto_ponto))
+        self.next_slide() # Paso de Lamina
+        # Desaparece
+        self.play(FadeOut(ponto),Unwrite(texto_ponto))
+        self.next_slide() # Paso de Lamina
+        # === === === === === === === === === === 1 - blade (Inicial) === === === === === === === === === ===
+
+        # Donde esta la posicion inicial del vector
+        posicao_vetor = np.array([-3.5, 0, 0])
+
+        vetor = Arrow(
+            start=ORIGIN,
+            end=np.array([2, 1, 0]),
+            buff=0,
+            color=BLUE_D
+        ).shift(posicao_vetor) # <--- CORREÇÃO 1: Usar .shift() ou .move_to()
+        vetor.pf = vetor.copy().move_to([linea.width/4, dashed_line_2.height/4 ,0]) # Copia del vector
+
+        # Texto del vector
+        texto_vetor = MathTex(
+            r"\vec{v}", # <-- MathTex separa por chunks. \vec{v} é o chunk [0]
+            r"\:\text{é um }",r"1\text{-blade}",
+            color=BLACK
+        ).next_to(vetor, RIGHT)
+        texto_vetor.pf = texto_vetor[2].copy().next_to(vetor.pf,DOWN)
+
+        # 3. Definição do Vetor Negativo (Mobject de DESTINO)
+        # O destino da transformação deve ter a mesma estrutura (chunk) ou ser um objeto Tex/MathTex válido.
+        # Para Transformar texto em texto, o ideal é que seja apenas MathTex.
+        menos_vetor_mobj = MathTex(r"-\vec{v}", color=BLACK)
+        menos_vetor_mobj.next_to(texto_vetor[1],LEFT)
+        # Posicionamos o destino fora da tela ou no lugar do alvo (a transformação cuidará do posicionamento)
+
+        # Aparece
+        self.play(GrowArrow(vetor), Write(texto_vetor))
+        self.next_slide() # Paso de Lamina
+
+        # Siguiente Slide
+
+        # Se transforma
+        self.play(
+            # A rotação de PI (180 graus) deve ser feita usando .rotate().
+            vetor.animate.rotate(PI), # <--- CORREÇÃO 2: Rotação em torno do ponto de origem do vetor
+
+            # Transformar o primeiro chunk do texto (vetor v) para o novo Mobject (-\vec{v})
+            Transform(texto_vetor[0], menos_vetor_mobj) # <--- CORREÇÃO 3: Renomeada para evitar confusão.
+        )
+        # Desaparece el vector
+        self.next_slide() # Paso de Lamina
+        self.play(Uncreate(menos_vetor_mobj),Uncreate(texto_vetor),FadeOut(vetor))
+
+        # === === === === === === === === === === 2 - blade (Inicial) === === === === === === === === === ===
+        # Animacion del 2-blade
+
+        v1 = np.array([2, 1, 0])
+        v2 = np.array([1, 2, 0])
+
+        v_1 = Arrow(ORIGIN, v1, color=BLUE_D, buff=0)
+        v_2 = Arrow(ORIGIN, v2, color=BLUE_D, buff=0)
+
+
+        # Calcular los puntos del paralelogramo
+        p0 = ORIGIN
+        p1 = v1
+        p2 = v1 + v2
+        p3 = v2
+
+        area = Polygon(p0, p1, p2, p3, color=BLUE, fill_opacity=0.15)
+
+        grupo_area = VGroup(area,v_1,v_2).scale(1.3).move_to(LEFT*2)
+        grupo_area.pf = grupo_area.copy().move_to([-linea.width/4, -dashed_line_2.height/4 ,0]).scale(0.5)
+
+        texto_area = MathTex(
+            r"v_1 \wedge v_2",r"\:\text{é um }", r"2\text{-blade}",
+            color=BLACK
+        )
+        texto_area.next_to(v_1, 3*RIGHT + UP)
+        texto_area.pf = texto_area[2].copy().next_to(grupo_area.pf,DOWN)
+
+        # Vetores al contrario
+
+        menos_bi_vetor = MathTex(r"-(v_2\wedge v_1) ",color=BLACK)
+        menos_bi_vetor.move_to(texto_area.get_center()+np.array([-1,0,0]))
+
+        self.play(GrowArrow(v_1),GrowArrow(v_2),Write(texto_area),run_time =3 )
+        self.play(FadeIn(area))
+        self.next_slide() # Paso de Lamina
+
+        # Alcontrario
+
+        self.play(grupo_area.animate.rotate(PI),
+                  texto_area[1].animate.shift(RIGHT),
+                  texto_area[2].animate.shift(RIGHT),
+                  Transform(texto_area[0],menos_bi_vetor)
+                  )
+        self.next_slide() # Paso de Lamina
+        # Borrar Cosas  del bi-vector
+
+        self.play(FadeOut(grupo_area), FadeOut(texto_area))
+
+
+        # === === === === === === === === === === 3 - blade (Inicial) === === === === === === === === === ===
+        # vetores del paralelepipedo
+
+        flecha1 = Arrow(np.array([-1, 0, 0]), np.array([3,0,0]), buff=0, color=BLUE_D)
+        flecha2 = Arrow(np.array([-1, 0, 0]), np.array([-2, -1, 0]), buff=0, color=BLUE_D)
+        flecha3 = Arrow(np.array([-1, 0, 0]), np.array([0, 2, 0]), buff=0, color=BLUE_D)
+
+        paralelepipedo = VGroup(flecha1,flecha2,flecha3)
+
+        # Caras del paralelepipedo
+
+        # Cara de Abajo
+
+        cara_aba = Polygon([-1,0,0], [-2, -1, 0], [2,-1, 0], [3,0, 0],
+                       fill_opacity=0.15, color=BLUE_D)
+
+        # Cara Izquierde
+
+        cara_izq = Polygon([-1,0,0], [-2, -1, 0], [-1, 1, 0], [0, 2, 0],
+                       fill_opacity=0.15, color=BLUE_D)
+
+        # Cara derecha
+
+        cara_dere = cara_izq.copy().set_color(BLUE_D)
+        cara_dere.shift(4*RIGHT)
+
+        # Cara de Arriba
+
+        cara_arri = cara_aba.copy().set_color(BLUE_D)
+        cara_arri.shift(2*UP+RIGHT)
+
+        # Cara Frontal
+
+        cara_fron = Polygon([-2,-1,0], [-1, 1, 0], [3,1, 0], [2,-1, 0],
+                       fill_opacity=0.15, color=BLUE_D)
+
+        # Cara trasera
+
+        cara_tras = cara_fron.copy().set_color(BLUE_D)
+        cara_tras.shift(UP+RIGHT)
+
+        # Todas las caras
+
+        caras_todas = VGroup(cara_izq,cara_dere,cara_aba,cara_arri,cara_tras,cara_fron)
+        casi_todas_caras = VGroup(cara_izq,cara_dere,cara_arri,cara_tras,cara_fron)
+
+        # Todo el beta
+
+        blade3_todo = VGroup(caras_todas,paralelepipedo).shift(4*LEFT)
+        blade3_todo.pf = blade3_todo.copy().move_to([linea.width/4, - dashed_line_2.height/4 ,0]).scale(0.5)
+
+        texto_volume = MathTex(
+            r"v_1 \wedge v_2 \wedge v_3", r"\:\text{é um }", r"3\text{-blade}",
+            color=BLACK
+            )
+        texto_volume.next_to(blade3_todo, RIGHT)
+        texto_volume.pf = texto_volume[2].copy().next_to(blade3_todo.pf,DOWN)
+
+        menos_tri_vetor = MathTex(r"-(v_2 \wedge v_1 \wedge v_3) ",color=BLACK)
+        menos_tri_vetor.move_to(texto_volume.get_center()+np.array([-1,0,0]))
+
+        self.play(GrowArrow(flecha1),GrowArrow(flecha2))#,GrowArrow(flecha3))
+        self.play(Create(cara_aba))
+        self.next_slide() # Paso de Lamina
+ 
+        self.play(GrowArrow(flecha3)) 
+        self.next_slide() # Paso de Lamina
+
+        self.play(FadeIn(casi_todas_caras))
+        self.play(Write(texto_volume))
+        self.next_slide() # Paso de Lamina
+
+        self.play(blade3_todo.animate.rotate(PI), texto_volume[1].animate.shift(RIGHT),texto_volume[2].animate.shift(RIGHT),Transform(texto_volume[0],menos_tri_vetor))
+
+        self.next_slide() # Paso de Lamina
+        self.play(FadeOut(blade3_todo),FadeOut(texto_volume))
+        self.next_slide() # Paso de Lamina 
+        # Aparecen las lineas que dividen el plano
+        self.play(Write(dashed_line_1),Write(dashed_line_2))
+        self.next_slide() # Paso de Lamina
+
+
+        # === === === === === === === === === === Blades (Final) === === === === === === === === === ===
+        self.play(Write(ponto.pf),Write(texto_ponto.pf))
+        self.play(Write(vetor.pf),Write(texto_vetor.pf))
+        self.play(Write(texto_area.pf) ,Write(grupo_area.pf))
+        self.play(Write(blade3_todo.pf),FadeIn(texto_volume.pf))
+        self.next_slide() # Paso de Lamina
+
+        # Desaparecen los elementos
+        self.play(FadeOut(dashed_line_1),FadeOut(dashed_line_2),
+                  Unwrite(ponto.pf),Unwrite(texto_ponto.pf),
+                  Unwrite(vetor.pf),Unwrite(texto_vetor.pf),
+                  Unwrite(texto_area.pf),Unwrite(grupo_area.pf),
+                  Unwrite(blade3_todo.pf),Unwrite(texto_volume.pf)
+                  )
+
+        # Desaparece el texto del título más el cursor
+        self.play(Unwrite(r3))
+        self.play(UntypeWithCursor(text, cursor))
 
          ######################## Lamina 4 #############################
 class lamina_4(Slide):
