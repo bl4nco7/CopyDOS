@@ -1,4 +1,22 @@
-
+# Archivos y Carpetas de Python
 venv/
-
 __pycache__/
+
+# Archivos y Carpetas de Manim (CRUCIAL)
+# 1. Carpeta de videos y activos generados (la más pesada)
+**/media/ 
+
+# 2. Archivos temporales de videos y otros assets
+*.mp4
+*.webm
+*.mov
+*.json
+*.log
+*.png
+
+# 3. Archivos de LaTeX generados por Manim
+# Manim usa LaTeX para las ecuaciones (MathTex, Tex)
+*.aux
+*.out
+*.fls
+*.fdb_latexmk
